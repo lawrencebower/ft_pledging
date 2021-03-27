@@ -23,3 +23,5 @@
 hs_err_pid*
 /.idea/
 /src/main/ts/node_modules/
+/src/main/resources/static/pledges.js
+/src/main/resources/static/bundle.js

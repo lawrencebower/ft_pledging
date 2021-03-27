@@ -1,22 +1,43 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:https="http://www.w3.org/1999/xhtml"
       xmlns:http="http://www.w3.org/1999/xhtml" lang="en">
-<head> 
-    <title>Getting Started: Serving Web Content</title> 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-    <script type="text/javascript" th:src="@{/pledges.js}"></script>
-    <div id="outerDiv" class="whatever" style="background-color: aqua">
-        <div id="total_div" style="font-size: 34pt;font-weight: bold">
-            Total pledged - £0
+<script type="text/javascript" th:src="@{/pledges.js}"></script>
+<div id="outerDiv" style="display: table;width: 100%">
+    <div id="project_header_div" style=";display: table-row;border-color: black;border-style: solid;">
+        <div style="width: 50%;display: table-cell">
+            <div id="project_number_div" style="font-size: 34pt;font-weight: bold;">
+                Project: 10
+            </div>
+            <div id="project_details_div" style="font-size: 34pt;font-weight: bold;">
+                7624 - Aegean Solidarity Network Team UK
+            </div>
+            <div id="project_sponsor_div" style="font-size: 24pt;font-weight: normal;">
+                Lawrence
+            </div>
+            <div id="project_staus_div" style="font-size: 24pt;font-weight: bold;color: red">
+                Charitable
+            </div>
         </div>
-        <div id="shortfall_div" style="font-size: 24pt;font-weight: bold;color: red">
-            Shortfall
-        </div>
-        <div id="pledges_div" style="font-size: 24pt">
-            This is the text in the div
+        <div style="width: 50%;display: table-cell;padding-left: 10px;vertical-align: center">
+            <div id="total_div" style="font-size: 48pt;font-weight: bold;">
+                £0
+            </div>
+            <div id="shortfall_div" style="font-size: 24pt;font-weight: bold;color: red">
+                Shortfall
+            </div>
         </div>
     </div>
+    <div id="recent_pledges_div" style="background-color: aqua;display: table-row;height: 50px;width: 100%">
+        ddddd
+    </div>
+    <div id="pledges_div" style="font-size: 24pt;display: table-row;border-color: black;border-style: solid;">
+        This is the text in the div
+    </div>
+</div>
 </body>
 </html>
