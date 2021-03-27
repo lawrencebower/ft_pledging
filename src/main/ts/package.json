@@ -1,0 +1,36 @@
+{
+  "name": "ft_pledging",
+  "version": "1.0.0",
+  "description": "description",
+  "main": "src/Webidemics2.js",
+  "dependencies": {
+    "@types/jquery": "3.3.29",
+    "jquery": "^3.5.1",
+    "@types/axios": "^0.14.0",
+    "axios": "^0.21.1",
+    "@types/react": "17.0.1",
+    "react": "17.0.1",
+    "ts-date": "^3.0.2",
+    "canvas-confetti": "^1.4.0",
+    "fireworks-js": "^1.0.4",
+    "ts-debounce": "^3.0.0"
+  },
+  "devDependencies": {
+    "ts-unit": "^1.0.1",
+    "@types/node": "^11.10.5"
+  },
+  "scripts": {
+    "tsbuild": "tsc -p tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browserify": "browserify src/controller/RunWebidemicsApp.js -o target/bundle.js -s app",
+    "listen": "node node_modules/http-server/bin/http-server",
+    "browse": "chrome --incognito --start-maximized http://127.0.0.1:8080/src/webidemic.html",
+    "start": "npm run tsbuild && npm run browserify && concurrently \"npm run listen\" \"npm run browse\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://pine--is.grid.private.cam.ac.uk:8888/gitlab/Webidemics2/Webidemics2.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

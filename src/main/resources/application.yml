@@ -1,0 +1,14 @@
+spring:
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/static/assets/css/
+      cache:
+        cachecontrol:
+          no-store: true
+  application:
+    name: thingy

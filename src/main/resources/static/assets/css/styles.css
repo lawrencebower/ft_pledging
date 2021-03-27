@@ -1,0 +1,15 @@
+.float-container {
+    border: 0;
+    padding: 0;
+}
+
+.float-child {
+    width: 50%;
+    float: left;
+    padding: 0;
+    border: 2px solid red;
+}
+
+.disable-dbl-tap-zoom {
+    touch-action: manipulation;
+}

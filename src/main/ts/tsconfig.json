@@ -1,0 +1,15 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es6",
+    "declaration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "inlineSources": true,
+    "lib": ["es6", "dom"]
+  },
+  "include": [
+    "src","src/view","src/model","src/controller"
+  ]
+}

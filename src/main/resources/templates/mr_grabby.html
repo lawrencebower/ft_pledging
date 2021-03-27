@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:https="http://www.w3.org/1999/xhtml"
+      xmlns:http="http://www.w3.org/1999/xhtml" lang="en">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <script type="text/javascript" th:src="@{/pledges.js}"></script>
+    <div id="outerDiv" class="whatever" style="background-color: aqua">
+        <div id="total_div" style="font-size: 34pt;font-weight: bold">
+            Total pledged - £0
+        </div>
+        <div id="shortfall_div" style="font-size: 24pt;font-weight: bold;color: red">
+            Shortfall
+        </div>
+        <div id="pledges_div" style="font-size: 24pt">
+            This is the text in the div
+        </div>
+    </div>
+</body>
+</html>
