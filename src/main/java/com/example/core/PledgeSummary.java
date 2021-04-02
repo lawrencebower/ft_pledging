@@ -1,11 +1,11 @@
-package com.example.restservice;
+package com.example.core;
 
-public class Greeting {
+public class PledgeSummary {
 
     private final long id;
     private final int content;
 
-    public Greeting(long id, int content) {
+    public PledgeSummary(long id, int content) {
         this.id = id;
         this.content = content;
     }

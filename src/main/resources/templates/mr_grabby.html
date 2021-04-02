@@ -4,13 +4,17 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}"/>
 </head>
 <body>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+<!--<script type="text/javascript" th:src="@{../../ts/node_modules/jquery/dist/jquery.js}"></script>-->
 <script type="text/javascript" th:src="@{/pledges.js}"></script>
 <div id="outerDiv" style="display: table;width: 100%">
-    <div id="project_header_div" style=";display: table-row;border-color: black;border-style: solid;">
-        <div style="width: 50%;display: table-cell">
-            <div id="project_number_div" style="font-size: 34pt;font-weight: bold;">
+    <div id="project_header_div" style=";display: table-row;">
+        <div style="width: 50%;display: table-cell;border-color: black;border-style: hidden;vertical-align: top">
+            <div id="project_number_div"
+                 style="font-size: 34pt;font-weight: bold;border-color: red;border-style: hidden;">
                 Project: 10
             </div>
             <div id="project_details_div" style="font-size: 34pt;font-weight: bold;">
@@ -23,7 +27,7 @@
                 Charitable
             </div>
         </div>
-        <div style="width: 50%;display: table-cell;padding-left: 10px;vertical-align: center">
+        <div style="border-style: hidden;width: 50%;display: table-cell;padding-left: 10px;padding-top: 60px">
             <div id="total_div" style="font-size: 48pt;font-weight: bold;">
                 £0
             </div>
@@ -32,12 +36,17 @@
             </div>
         </div>
     </div>
-    <div id="recent_pledges_div" style="background-color: aqua;display: table-row;height: 50px;width: 100%">
-        ddddd
+</div>
+<div style="display: table;width: 100%">
+    <div style="display: table-row;height: 50px;width: 100%;padding: 5px;border-style: solid;border-color: black">
+        <div id="recent_pledges_div" style="display: table-cell;text-align: center;font-size: 24pt;">
+            ddddd
+        </div>
     </div>
-    <div id="pledges_div" style="font-size: 24pt;display: table-row;border-color: black;border-style: solid;">
-        This is the text in the div
-    </div>
+</div>
+<div id="mr_wrappy" class="wrap">
+    <ul id="pledge_container">
+    </ul>
 </div>
 </body>
 </html>

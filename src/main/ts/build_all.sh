@@ -1,1 +1,1 @@
-./compile.sh;browserify org/network/App.js -o ../resources/static/bundle.js -s app;browserify org/network/AllPledgesPageCaller.js -o ../resources/static/pledges.js -s app
+./compile.sh;browserify org/network/individual_pledge/phone_client.js -o ../resources/static/bundle.js -s app;browserify org/network/pledge_summary/AllPledgesPageCaller.js -o ../resources/static/pledges.js -s app

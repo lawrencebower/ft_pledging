@@ -13,3 +13,37 @@
 .disable-dbl-tap-zoom {
     touch-action: manipulation;
 }
+/* .container {*/
+/*     position: relative;*/
+/* }*/
+
+/*.vertical-center {*/
+/*    margin: 0;*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    -ms-transform: translateY(-50%);*/
+/*    transform: translateY(-50%);*/
+/*}*/
+
+.wrap {
+    background: white;
+    width: 90%;
+    padding: 5px 5px;
+}
+
+li {
+    display: inline-block;
+    border: hidden black;
+    vertical-align: middle;
+    font-size: 30pt;
+    /*width: 150px;*/
+    /*height: 50px;*/
+    background: white;
+    list-style: none;
+    padding-right: 5px;
+}
+
+ul {
+    background: white;
+    margin: 0; padding: 5px;
+}

@@ -18,10 +18,6 @@ public class GreetingController {
     public String greeting(@RequestParam(name = "name", required = false, defaultValue = "no name") String name,
                            Model model) {
         model.addAttribute("name", name);
-//        this.todos2.add(new TodoItem(name, LocalDateTime.now()));
-//
-//        this.todos2.forEach(item ->{System.out.println(item.getDescription());});
-//        System.out.println(this.todos2);
         return "greeting";
     }
 

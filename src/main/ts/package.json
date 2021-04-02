@@ -13,6 +13,7 @@
     "ts-date": "^3.0.2",
     "canvas-confetti": "^1.4.0",
     "fireworks-js": "^1.0.4",
+    "moment": "^2.29.1",
     "ts-debounce": "^3.0.0"
   },
   "devDependencies": {

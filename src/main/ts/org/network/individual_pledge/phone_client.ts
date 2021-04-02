@@ -2,6 +2,7 @@ import axios, {AxiosResponse} from 'axios';
 import * as React from "react";
 import {debounce} from "ts-debounce";
 import { parse, format, addMonth } from "ts-date";
+import moment = require("moment");
 
 interface IPost {
     userId: number;
@@ -12,8 +13,8 @@ interface IPost {
 
 class Caller {
 
-    caller = (user, pledge) => this.makePledge(user, pledge)
-    bouncy = debounce(this.caller, 250, {isImmediate: false});
+    caller = (user, pledge, pledgeTime) => this.makePledge(user, pledge, pledgeTime)
+    bouncy = debounce(this.caller, 500, {isImmediate: false});
 
     public setup() {
 
@@ -39,11 +40,17 @@ class Caller {
         console.log(this.newPledge)
         this.tempTotalPledge = this.totalPledge + this.newPledge;
         this.pledgeDiv.innerText = String(this.tempTotalPledge);
-        this.bouncy(this.user, this.newPledge)
+        let dateTime = new Date()
+        let dateString = moment(dateTime).format('yy:MM:DD:HH:mm:ss:SS');
+
+        this.bouncy(this.user, this.newPledge, dateString)
     }
 
-    public makePledge(user: String, pledge: number) {
-        let callString = `http://192.168.0.21:8080/pledge?pledge=${pledge}&name=${user}`
+    public makePledge(user: String,
+                      pledge: number,
+                      pledgeTime: String) {
+
+        let callString = `http://192.168.0.21:8080/pledge?pledge=${pledge}&name=${user}&remoteTime=${pledgeTime}`
         axios.get(callString)
             .then(response => this.dealWith(response))
             .catch(error => this.error(error))
@@ -58,20 +65,20 @@ class Caller {
         this.tempTotalPledge = 0;
         this.newPledge = 0;
 
-        this.messageDiv.innerText = `Pledge saved (${this.getDateString()})`
+        this.messageDiv.innerText = `Pledge saved (${this.getPrettyDateString()})`
         this.pledgeDiv.innerText = String(this.totalPledge);
     }
 
     public error(error) {
         console.log(error)
-        this.messageDiv.innerText = `error! (${this.getDateString()})`
+        this.messageDiv.innerText = `error! (${this.getPrettyDateString()})`
     }
 
     public default() {
         console.log("default")
     }
 
-    public getDateString() : String {
+    public getPrettyDateString() : String {
         let date = new Date();
         return format(date, "HH:mm:ss");
     }
