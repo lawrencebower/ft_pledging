@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:https="http://www.w3.org/1999/xhtml"
+      xmlns:http="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}"/>
+</head>
+<body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/group_pledge_client.js}"></script>
+<div id="total_div" style="height: 100px;overflow-y: scroll;font-size: 48pt;font-weight: bold;text-align: center">No pledges</div>
+<div id="mr_wrappy" class="wrap_group">
+    <ul id="member_container"></ul>
+</div>
+</body>
+</html>

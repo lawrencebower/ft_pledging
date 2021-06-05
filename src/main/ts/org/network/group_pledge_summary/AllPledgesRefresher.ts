@@ -4,6 +4,7 @@ import {} from "jquery"
 import {byTextAscending} from "../Utils";
 import moment = require("moment");
 import {format} from "ts-date";
+import {Constants} from "../common/Constants";
 
 export class Pledge {
     name: string;
@@ -25,7 +26,6 @@ export class AllPledgesRefresher {
          this.pledgesContainer = document.getElementById("pledge_container") as HTMLUListElement;
          this.recentPledgesDiv = document.getElementById("recent_pledges_div") as HTMLDivElement;
          this.shortfallDiv = document.getElementById("shortfall_div") as HTMLDivElement;
-         document.addEventListener("keydown", (e) => this.myFunc(e))
          this.recentPledgesQueue = [];
          this.allPledgesDict = {};
          this.latestPledgeTime = null;
@@ -39,17 +39,13 @@ export class AllPledgesRefresher {
             sinceTime = this.latestPledgeTime;
         }
 
-        let callString = `http://192.168.0.21:8080/all_pledges_service?sinceTime=${sinceTime}`
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_pledges_service?sinceTime=${sinceTime}`
         // let callString = "http://localhost:8080/all_pledges_service"
         console.log("getting pledges")
         axios.get(callString)
             .then(response => this.dealWith(response))
             .catch(error => this.error(error))
             .then(() => this.default());
-    }
-
-    public myFunc(evt : KeyboardEvent) {
-         console.log(evt);
     }
 
     public dealWith(response: AxiosResponse) {
@@ -108,10 +104,10 @@ export class AllPledgesRefresher {
 
             if (liPledgeElement == undefined) {
                 liPledgeElement = document.createElement('li') as HTMLLIElement
-                liPledgeElement.setAttribute("style", "padding-right: 15px;border: solid black")
+                liPledgeElement.setAttribute("style", "li")
                 liPledgeElement.setAttribute("id", userName)
                 this.pledgesContainer.appendChild(liPledgeElement)
-                this.pledgesContainer.appendChild(document.createElement('li'))//a space
+                // this.pledgesContainer.appendChild(document.createElement('li'))//a space
             }
 
             liPledgeElement.innerText = token

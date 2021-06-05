@@ -3,6 +3,8 @@ import * as React from "react";
 import {debounce} from "ts-debounce";
 import { parse, format, addMonth } from "ts-date";
 import moment = require("moment");
+import {getPrettyDateString} from "../Utils";
+import {Constants} from "../common/Constants";
 
 interface IPost {
     userId: number;
@@ -50,7 +52,7 @@ class Caller {
                       pledge: number,
                       pledgeTime: String) {
 
-        let callString = `http://192.168.0.21:8080/pledge?pledge=${pledge}&name=${user}&remoteTime=${pledgeTime}`
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/pledge?pledge=${pledge}&name=${user}&remoteTime=${pledgeTime}`
         axios.get(callString)
             .then(response => this.dealWith(response))
             .catch(error => this.error(error))
@@ -65,22 +67,17 @@ class Caller {
         this.tempTotalPledge = 0;
         this.newPledge = 0;
 
-        this.messageDiv.innerText = `Pledge saved (${this.getPrettyDateString()})`
+        this.messageDiv.innerText = `Pledge saved (${getPrettyDateString()})`
         this.pledgeDiv.innerText = String(this.totalPledge);
     }
 
     public error(error) {
         console.log(error)
-        this.messageDiv.innerText = `error! (${this.getPrettyDateString()})`
+        this.messageDiv.innerText = `error! (${getPrettyDateString()})`
     }
 
     public default() {
         console.log("default")
-    }
-
-    public getPrettyDateString() : String {
-        let date = new Date();
-        return format(date, "HH:mm:ss");
     }
 
     private giveButton: HTMLButtonElement;

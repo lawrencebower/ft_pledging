@@ -1,11 +1,12 @@
 import axios, {AxiosResponse} from "axios";
 import {JSEffects} from "./JSEffects";
 import {byTextAscending} from "../Utils";
+import {Constants} from "../common/Constants";
 
 export class AllPledgesTester {
 
     public run() {
-        let callString = "http://192.168.0.21:8080/all_pledges_service"
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_pledges_service`
         // let callString = "http://localhost:8080/all_pledges_service"
         console.log("getting pledges")
         axios.get(callString)

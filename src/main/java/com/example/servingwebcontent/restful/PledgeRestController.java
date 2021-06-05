@@ -1,8 +1,6 @@
 package com.example.servingwebcontent.restful;
 
-import com.example.core.Pledge;
-import com.example.core.PledgeCounter;
-import com.example.core.PledgeSummary;
+import com.example.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +13,10 @@ import java.util.List;
 @CrossOrigin
 public class PledgeRestController {
 
-    private static final String template = "Hello, %s!";
-
     @Autowired
     private PledgeCounter counter;
+    @Autowired
+    private MemberLoader memberLoader;
 
     @GetMapping("/pledge")
     public PledgeSummary registerPledge(@RequestParam(value = "name", defaultValue = "no_name") String name,
@@ -36,9 +34,7 @@ public class PledgeRestController {
     }
 
     @GetMapping("/all_members_service")
-    public List<Pledge> allMembers(@RequestParam(value = "sinceTime", defaultValue = "all") String timeString) {
-        List<Pledge> allPledges = counter.getAllPledges(timeString);
-
-        return allPledges;
+    public List<Member> allMembers() {
+        return memberLoader.get_all_members();
     }
 }
