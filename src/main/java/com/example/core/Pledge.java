@@ -8,6 +8,7 @@ public class Pledge implements Comparable<Pledge>{
 
     private final String name;
     private final int pledge;
+    private final int projectId;
     private final Date clientPledgeTime;
     private final Date serverPledgeTime;
     private final String serverTimeString;
@@ -15,11 +16,13 @@ public class Pledge implements Comparable<Pledge>{
 
     public Pledge(String name,
                   int pledge,
+                  int projectId,
                   Date clientTime,
                   Date serverTime) {
 
         this.name = name;
         this.pledge = pledge;
+        this.projectId = projectId;
         this.clientPledgeTime = clientTime;
         this.serverPledgeTime = serverTime;
 
@@ -29,27 +32,31 @@ public class Pledge implements Comparable<Pledge>{
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public int getPledge() {
-        return pledge;
+        return this.pledge;
+    }
+
+    public int getProjectId() {
+        return this.projectId;
     }
 
     public Date getServerPledgeTime() {
-        return serverPledgeTime;
+        return this.serverPledgeTime;
     }
 
     public String getServerTimeString() {
-        return serverTimeString;
+        return this.serverTimeString;
     }
 
     public Date getClientPledgeTime() {
-        return clientPledgeTime;
+        return this.clientPledgeTime;
     }
 
     public String getClientTimeString() {
-        return clientTimeString;
+        return this.clientTimeString;
     }
 
     @Override
