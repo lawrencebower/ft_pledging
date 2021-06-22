@@ -6,27 +6,28 @@ import org.springframework.context.annotation.Bean;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class PledgeCounter {
 
-    private int totalPledges = 0;
+    private final Map<Integer, Float> totalPledges = new HashMap<>();
     private final List<Pledge> allPledges = new ArrayList<>();
+    private final List<Project> allProjects = new ArrayList<>();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yy:MM:dd:HH:mm:ss:SS");
 
     public void incrementPledge(String name,
                                 int pledge,
+                                int projectId,
                                 String remoteTimeString) {
         try {
 
-            this.totalPledges += pledge;
+            Float currentPledge = this.totalPledges.get(projectId);
+            this.totalPledges.put(projectId, (currentPledge + pledge));
 
             Date remoteTime = dateFormat.parse(remoteTimeString);
             Pledge pledgeObject = new Pledge(name,
                     pledge,
+                    projectId,
                     remoteTime,
                     Calendar.getInstance().getTime());
 
@@ -39,7 +40,11 @@ public class PledgeCounter {
     }
 
     public int getTotalPledges() {
-        return totalPledges;
+        return -1;
+    }
+
+    public float getTotalPledgeForProject(int projectId) {
+        return this.totalPledges.get(projectId);
     }
 
     public List<Pledge> getAllPledges(String sinceTimeString) {
@@ -74,5 +79,14 @@ public class PledgeCounter {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void addProject(Project project) {
+        this.allProjects.add(project);
+        this.totalPledges.put(project.getId(), 0f);
+    }
+
+    public List<Project> getAllProjects() {
+        return allProjects;
     }
 }
