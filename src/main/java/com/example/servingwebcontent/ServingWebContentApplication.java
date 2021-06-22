@@ -2,6 +2,7 @@ package com.example.servingwebcontent;
 
 import com.example.core.MemberLoader;
 import com.example.core.PledgeCounter;
+import com.example.core.Project;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,12 @@ public class ServingWebContentApplication {
     @Bean
     @Scope(value = WebApplicationContext.SCOPE_APPLICATION)
     public PledgeCounter counter() {
-        return new PledgeCounter();
+        PledgeCounter counter = new PledgeCounter();
+        counter.addProject(new Project(1, "project 1"));
+        counter.addProject(new Project(2, "project 2"));
+        counter.addProject(new Project(3, "project 3"));
+        counter.addProject(new Project(4, "project 4"));
+        return counter;
     }
 
     @Bean

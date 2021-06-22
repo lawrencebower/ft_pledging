@@ -20,10 +20,19 @@ public class PledgeRestController {
 
     @GetMapping("/pledge")
     public PledgeSummary registerPledge(@RequestParam(value = "name", defaultValue = "no_name") String name,
+                                        @RequestParam(value = "projectId", defaultValue = "1") int projectId,
                                         @RequestParam(value = "pledge", defaultValue = "0") int pledge,
                                         @RequestParam(value = "remoteTime", defaultValue = "0") String rTime) {
-        this.counter.incrementPledge(name, pledge, rTime);
-        return new PledgeSummary(1, counter.getTotalPledges());
+        System.out.printf("Pledge %s %s %s%n", name, projectId, pledge);
+        this.counter.incrementPledge(name, pledge, projectId, rTime);
+        return new PledgeSummary(projectId, counter.getTotalPledgeForProject(projectId));
+    }
+
+    @GetMapping("/all_projects")
+    public List<Project> allProjects() {
+        List<Project> allProjects = counter.getAllProjects();
+
+        return allProjects;
     }
 
     @GetMapping("/all_pledges_service")

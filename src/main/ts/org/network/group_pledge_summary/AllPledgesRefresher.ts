@@ -6,18 +6,34 @@ import moment = require("moment");
 import {format} from "ts-date";
 import {Constants} from "../common/Constants";
 
-export class Pledge {
+export class PledgeTS {
     name: string;
     pledge: number;
     creationTime: Date;
+    newPledge: boolean
 
-    constructor(name: string, pledge: number, creationTime: Date) {
+    constructor(name: string,
+                pledge: number,
+                newPledge: boolean,
+                creationTime: Date) {
         this.name = name;
         this.pledge = pledge;
         this.creationTime = creationTime;
+        this.newPledge = newPledge;
     }
+
 }
 
+export class ProjectTS {
+
+    projectId: number;
+    projectName: string;
+
+    constructor(projectId: number, projectName: string) {
+        this.projectId = projectId;
+        this.projectName = projectName;
+    }
+}
 export class AllPledgesRefresher {
 
      public setup() {
@@ -26,34 +42,109 @@ export class AllPledgesRefresher {
          this.pledgesContainer = document.getElementById("pledge_container") as HTMLUListElement;
          this.recentPledgesDiv = document.getElementById("recent_pledges_div") as HTMLDivElement;
          this.shortfallDiv = document.getElementById("shortfall_div") as HTMLDivElement;
+         this.projectIdDiv = document.getElementById("project_id_div") as HTMLDivElement;
+         this.projectBackButton = document.getElementById("project_back_button") as HTMLButtonElement;
+         this.projectForwardButton = document.getElementById("project_forward_button") as HTMLButtonElement;
          this.recentPledgesQueue = [];
          this.allPledgesDict = {};
          this.latestPledgeTime = null;
-         setInterval(() => this.run(), 2000);
+
+         this.projectForwardButton.addEventListener("click", (event) => {this.incrementProject()})
+         this.projectBackButton.addEventListener("click", (event) => {this.decrementProject()})
+
+         this.populateProjectsFromServer();
+         setInterval(() => this.runPledgeUpdater(), 3 000);
     }
 
-    public run() {
+    public populateProjectsFromServer() {
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_projects`
+        console.log("getting projects")
+        axios.get(callString)
+            .then(response => this.populateProjects(response))
+            .catch(error => this.error(error))
+            .then(() => this.default());
+    }
+
+    private populateProjects(response: AxiosResponse) {
+
+        this.allProjects = []
+        let items = response.data
+
+        for (let item of items) {
+
+            let name = item["name"]
+            let id = item["id`"]
+
+            let project = new ProjectTS(id, name);
+            this.allProjects.push(project);
+        }
+
+        this.selectFirstProject();
+    }
+
+    private selectFirstProject() {
+        this.selectProject(1)
+    }
+
+    private incrementProject(){
+        if (this.selectedProjectIndex == this.allProjects.length) {
+            this.selectedProjectIndex = 1
+        } else {
+            this.selectedProjectIndex += 1
+        }
+        this.selectProject(this.selectedProjectIndex)
+    }
+
+    private decrementProject() {
+        if (this.selectedProjectIndex == 1) {
+            this.selectedProjectIndex = this.allProjects.length
+        } else {
+            this.selectedProjectIndex -= 1
+        }
+        this.selectProject(this.selectedProjectIndex)
+    }
+
+    private selectProject(index: number) {
+        let project = this.allProjects[index-1]
+        this.selectedProject = project
+        this.projectIdDiv.innerText = project.projectName
+        this.clearPledges()
+    }
+
+    private clearPledges(){
+        this.recentPledgesQueue = [];
+        this.allPledgesDict = {};
+        this.passedThreshold = false;
+        this.latestPledgeTime = null;
+
+        this.recentPledgesDiv.innerHTML = ""
+        this.pledgesContainer.innerHTML = ""
+        this.totalDiv.innerHTML = ""
+        this.shortfallDiv.innerHTML = ""
+    }
+
+    public runPledgeUpdater() {
 
         let sinceTime = "all"
         if (this.latestPledgeTime != null) {
             sinceTime = this.latestPledgeTime;
         }
 
-        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_pledges_service?sinceTime=${sinceTime}`
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_pledges?sinceTime=${sinceTime}`
         // let callString = "http://localhost:8080/all_pledges_service"
         console.log("getting pledges")
         axios.get(callString)
-            .then(response => this.dealWith(response))
+            .then(response => this.updatePledges(response))
             .catch(error => this.error(error))
             .then(() => this.default());
     }
 
-    public dealWith(response: AxiosResponse) {
+    public updatePledges(response: AxiosResponse) {
 
         // let allPLedgesList: string[] = [];
         let pledges = response.data;
 
-        let newPledges: Pledge[] = []
+        let newPledges: PledgeTS[] = []
 
         // pledges.sort(byTextAscending((item: {}) => item["serverTimeString"]))
         // pledges = pledges.reverse()
@@ -61,6 +152,7 @@ export class AllPledgesRefresher {
         let now = new Date().getTime()
         for (let pledge of this.recentPledgesQueue.reverse()) {
             if (now - pledge.creationTime.getTime() < 10000) {
+                pledge.newPledge = false;
                 newPledges.push(pledge)
             }
         }
@@ -72,7 +164,7 @@ export class AllPledgesRefresher {
             let dateString = item["serverTimeString"]
 
             let dateTime = new Date()
-            let newPledge = new Pledge(name, pledge, dateTime);
+            let newPledge = new PledgeTS(name, pledge, true, dateTime);
             console.log(`${newPledge.name}:${newPledge.pledge} - ${format(newPledge.creationTime, "yy:MM:dd:HH:mm:ss:SS")}\n`)
             newPledges.push(newPledge)
             this.addNewPledge(newPledge)
@@ -85,10 +177,16 @@ export class AllPledgesRefresher {
 
         let recentPledgesString = ""
         for (let pledge of this.recentPledgesQueue.reverse()) {
-            recentPledgesString += `${pledge.name}:${pledge.pledge} `;
+            if (pledge.newPledge) {
+                recentPledgesString += `<span style="color: crimson;font-weight: bold">${pledge.name}:${pledge.pledge}</span> `;
+            } else {
+                recentPledgesString += `<span style="color: black">${pledge.name}:${pledge.pledge}</span> `;
+            }
         }
 
         this.recentPledgesDiv.innerHTML = recentPledgesString
+
+        // ALL PLEDGES
 
         let pledgeTotal: number = 0
 
@@ -129,7 +227,7 @@ export class AllPledgesRefresher {
             if (!this.passedThreshold) {
                 // doFireworks();
                 // doRealistic();
-                new JSEffects().schoolPride();
+                // new JSEffects().schoolPride();
                 // new JSEffects().doRealFireworks();
                 // new JSEffects().doRealistic();
                 // new JSEffects().doFireworks();
@@ -138,7 +236,7 @@ export class AllPledgesRefresher {
         }
     }
 
-    private addNewPledge(newPledge: Pledge) {
+    private addNewPledge(newPledge: PledgeTS) {
         if (this.allPledgesDict.hasOwnProperty(newPledge.name)) {
             this.allPledgesDict[newPledge.name] += newPledge.pledge
         } else {
@@ -154,14 +252,20 @@ export class AllPledgesRefresher {
         console.log("default")
     }
 
-    private recentPledgesQueue: Pledge[] = [];
+    private recentPledgesQueue: PledgeTS[] = [];
     private allPledgesDict: {[key: string]: number} = {};
     private passedThreshold: boolean = false;
     private latestPledgeTime: string = null;
+    private allProjects: ProjectTS[]
+    private selectedProject: ProjectTS
+    private selectedProjectIndex: number = 1;
 
     private pledgesDiv: HTMLDivElement;
     private recentPledgesDiv: HTMLDivElement;
     private pledgesContainer: HTMLUListElement;
     private totalDiv: HTMLDivElement;
     private shortfallDiv: HTMLDivElement;
+    private projectIdDiv: HTMLDivElement;
+    private projectBackButton: HTMLButtonElement;
+    private projectForwardButton: HTMLButtonElement;
 }

@@ -13,7 +13,13 @@ class GroupPledger {
         document.addEventListener("keydown", (e) => this.handleKeyPress(e))
         this.totalDiv = document.getElementById("total_div") as HTMLDivElement;
         this.membersContainer = document.getElementById("member_container") as HTMLUListElement;
-        this.callPopulateMembers()
+        this.allPledgersDiv = document.getElementById("mr_wrappy") as HTMLDivElement;
+        this.editMemberDiv = document.getElementById("edit_user") as HTMLDivElement;
+        let backToAllElement = document.getElementById("back_to_all_button") as HTMLButtonElement;
+        backToAllElement.addEventListener("click", (event) => {
+            this.showAllPledgers();
+        })
+        this.callPopulateMembers();
     }
 
     public callPopulateMembers() {
@@ -22,6 +28,16 @@ class GroupPledger {
             .then(response => this.populateMembers(response))
             .catch(error => this.error(error))
             .then(() => this.default());
+    }
+
+    public showEditMember() {
+        this.membersContainer.style.display = "none"
+        this.editMemberDiv.style.display = "block"
+    }
+
+    public showAllPledgers() {
+        this.membersContainer.style.display = "block"
+        this.editMemberDiv.style.display = "none"
     }
 
     public populateMembers(response: AxiosResponse) {
@@ -60,7 +76,8 @@ class GroupPledger {
 
                 moreDivElement.innerText = "+"
                 moreDivElement.addEventListener("click", (event) => {
-                    console.log("hi")
+                    console.log("low")
+                    this.showEditMember()
                 })
 
                 liRowDivElement.appendChild(nameDivElement)
@@ -137,6 +154,8 @@ class GroupPledger {
     private newPledge: number = 0
     private totalDiv: HTMLDivElement;
     private currentMemberElement: HTMLDivElement
+    // private allPledgersDiv: HTMLDivElement
+    private editMemberDiv: HTMLDivElement
 
 }
 
