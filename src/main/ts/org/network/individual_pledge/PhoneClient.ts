@@ -52,7 +52,8 @@ class Caller {
                       pledge: number,
                       pledgeTime: String) {
 
-        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/pledge?pledge=${pledge}&name=${user}&remoteTime=${pledgeTime}`
+        let projectId = 7624
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/pledge?pledge=${pledge}&projectId=${projectId}&name=${user}&remoteTime=${pledgeTime}`
         axios.get(callString)
             .then(response => this.dealWith(response))
             .catch(error => this.error(error))

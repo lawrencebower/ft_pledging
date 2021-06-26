@@ -28,10 +28,21 @@ export class ProjectTS {
 
     projectId: number;
     projectName: string;
+    projectOrganisation: string;
+    projectSponsor: string;
+    projectStatus: string;
 
-    constructor(projectId: number, projectName: string) {
+    constructor(projectId: number,
+                projectName: string,
+                projectOrganisation: string,
+                projectSponsor: string,
+                projectStatus: string) {
+
         this.projectId = projectId;
         this.projectName = projectName;
+        this.projectOrganisation = projectOrganisation;
+        this.projectSponsor = projectSponsor;
+        this.projectStatus = projectStatus;
     }
 }
 export class AllPledgesRefresher {
@@ -43,6 +54,9 @@ export class AllPledgesRefresher {
          this.recentPledgesDiv = document.getElementById("recent_pledges_div") as HTMLDivElement;
          this.shortfallDiv = document.getElementById("shortfall_div") as HTMLDivElement;
          this.projectIdDiv = document.getElementById("project_id_div") as HTMLDivElement;
+         this.projectDetailsDiv = document.getElementById("project_details_div") as HTMLDivElement;
+         this.projectSponsorDiv = document.getElementById("project_sponsor_div") as HTMLDivElement;
+         this.projectStatusDiv = document.getElementById("project_status_div") as HTMLDivElement;
          this.projectBackButton = document.getElementById("project_back_button") as HTMLButtonElement;
          this.projectForwardButton = document.getElementById("project_forward_button") as HTMLButtonElement;
          this.recentPledgesQueue = [];
@@ -53,7 +67,7 @@ export class AllPledgesRefresher {
          this.projectBackButton.addEventListener("click", (event) => {this.decrementProject()})
 
          this.populateProjectsFromServer();
-         setInterval(() => this.runPledgeUpdater(), 3 000);
+         setInterval(() => this.runPledgeUpdater(), 3000);
     }
 
     public populateProjectsFromServer() {
@@ -73,9 +87,17 @@ export class AllPledgesRefresher {
         for (let item of items) {
 
             let name = item["name"]
-            let id = item["id`"]
+            let id = item["id"]
+            let organisation = item["organisation"]
+            let sponsor = item["sponsor"]
+            let status = item["status"]
 
-            let project = new ProjectTS(id, name);
+            let project = new ProjectTS(id,
+                name,
+                organisation,
+                sponsor,
+                status);
+
             this.allProjects.push(project);
         }
 
@@ -83,12 +105,12 @@ export class AllPledgesRefresher {
     }
 
     private selectFirstProject() {
-        this.selectProject(1)
+        this.selectProject(0)
     }
 
     private incrementProject(){
-        if (this.selectedProjectIndex == this.allProjects.length) {
-            this.selectedProjectIndex = 1
+        if (this.selectedProjectIndex == this.allProjects.length-1) {
+            this.selectedProjectIndex = 0
         } else {
             this.selectedProjectIndex += 1
         }
@@ -96,8 +118,8 @@ export class AllPledgesRefresher {
     }
 
     private decrementProject() {
-        if (this.selectedProjectIndex == 1) {
-            this.selectedProjectIndex = this.allProjects.length
+        if (this.selectedProjectIndex == 0) {
+            this.selectedProjectIndex = this.allProjects.length-1
         } else {
             this.selectedProjectIndex -= 1
         }
@@ -105,13 +127,17 @@ export class AllPledgesRefresher {
     }
 
     private selectProject(index: number) {
-        let project = this.allProjects[index-1]
+        console.log("selecting project " + index)
+        let project = this.allProjects[index]
         this.selectedProject = project
         this.projectIdDiv.innerText = project.projectName
+        this.projectDetailsDiv.innerText = `${project.projectId} - ${project.projectOrganisation}`
+        this.projectSponsorDiv.innerText = project.projectSponsor
+        this.projectStatusDiv.innerText = project.projectStatus
         this.clearPledges()
     }
 
-    private clearPledges(){
+    private clearPledges() {
         this.recentPledgesQueue = [];
         this.allPledgesDict = {};
         this.passedThreshold = false;
@@ -130,7 +156,9 @@ export class AllPledgesRefresher {
             sinceTime = this.latestPledgeTime;
         }
 
-        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_pledges?sinceTime=${sinceTime}`
+        let projectId = this.selectedProject.projectId
+
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_pledges?projectId=${projectId}&sinceTime=${sinceTime}`
         // let callString = "http://localhost:8080/all_pledges_service"
         console.log("getting pledges")
         axios.get(callString)
@@ -258,7 +286,7 @@ export class AllPledgesRefresher {
     private latestPledgeTime: string = null;
     private allProjects: ProjectTS[]
     private selectedProject: ProjectTS
-    private selectedProjectIndex: number = 1;
+    private selectedProjectIndex: number = 0;
 
     private pledgesDiv: HTMLDivElement;
     private recentPledgesDiv: HTMLDivElement;
@@ -266,6 +294,9 @@ export class AllPledgesRefresher {
     private totalDiv: HTMLDivElement;
     private shortfallDiv: HTMLDivElement;
     private projectIdDiv: HTMLDivElement;
+    private projectDetailsDiv: HTMLDivElement;
+    private projectSponsorDiv: HTMLDivElement;
+    private projectStatusDiv: HTMLDivElement;
     private projectBackButton: HTMLButtonElement;
     private projectForwardButton: HTMLButtonElement;
 }

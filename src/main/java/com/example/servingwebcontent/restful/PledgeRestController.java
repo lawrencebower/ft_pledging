@@ -35,14 +35,15 @@ public class PledgeRestController {
         return allProjects;
     }
 
-    @GetMapping("/all_pledges_service")
-    public List<Pledge> allPledges(@RequestParam(value = "sinceTime", defaultValue = "all") String timeString) {
-        List<Pledge> allPledges = counter.getAllPledges(timeString);
+    @GetMapping("/all_pledges")
+    public List<Pledge> allPledges(@RequestParam(value = "projectId", defaultValue = "-1") int projectId,
+                                   @RequestParam(value = "sinceTime", defaultValue = "all") String timeString) {
+        List<Pledge> allPledges = counter.getAllPledges(projectId, timeString);
 
         return allPledges;
     }
 
-    @GetMapping("/all_members_service")
+    @GetMapping("/all_members")
     public List<Member> allMembers() {
         return memberLoader.get_all_members();
     }

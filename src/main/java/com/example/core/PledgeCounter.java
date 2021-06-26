@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PledgeCounter {
 
@@ -32,7 +33,7 @@ public class PledgeCounter {
                     Calendar.getInstance().getTime());
 
             this.allPledges.add(pledgeObject);
-            System.out.printf("%s - total pledge now %s%n", pledgeObject, this.totalPledges);
+            System.out.printf("%s - total pledge now %s%n", pledgeObject.getProjectId(), this.totalPledges.get(projectId));
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -47,14 +48,15 @@ public class PledgeCounter {
         return this.totalPledges.get(projectId);
     }
 
-    public List<Pledge> getAllPledges(String sinceTimeString) {
+    public List<Pledge> getAllPledges(int desiredProjectId, String sinceTimeString) {
 
-        System.out.printf("Getting pledges since %s%n", sinceTimeString);
+        System.out.printf("Getting pledges for project %s since %s%n", desiredProjectId, sinceTimeString);
 
         List<Pledge> results = new ArrayList<>();
 
         if (sinceTimeString.equals("all")) {
-            results = this.allPledges;
+            results = this.allPledges.stream()
+                    .filter(pledge -> desiredProjectId == (pledge.getProjectId())).collect(Collectors.toList());
         } else {
             Date sinceDate = this.parseDate(sinceTimeString);
             Date sinceDateTrimmed = DateUtils.truncate(sinceDate, Calendar.MILLISECOND);
@@ -62,7 +64,7 @@ public class PledgeCounter {
             for (Pledge pledge : this.allPledges) {
                 Date serverPledgeTime = pledge.getServerPledgeTime();
                 Date serverPledgeTimeTrimmed = DateUtils.truncate(serverPledgeTime, Calendar.MILLISECOND);
-                if(serverPledgeTimeTrimmed.compareTo(sinceDateTrimmed) > 0) {
+                if(pledge.getProjectId() == desiredProjectId && serverPledgeTimeTrimmed.compareTo(sinceDateTrimmed) > 0) {
                     results.add(pledge);
                 }
             }

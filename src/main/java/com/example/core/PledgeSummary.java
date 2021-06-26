@@ -3,7 +3,7 @@ package com.example.core;
 public class PledgeSummary {
 
     private final long id;
-    private final int totalPledge;
+    private final float totalPledge;
 
     public PledgeSummary(long projectId, float totalPledge) {
         this.id = projectId;
@@ -14,7 +14,7 @@ public class PledgeSummary {
         return id;
     }
 
-    public int getTotalPledge() {
+    public float getTotalPledge() {
         return totalPledge;
     }
 }

@@ -13,7 +13,7 @@ class GroupPledger {
         document.addEventListener("keydown", (e) => this.handleKeyPress(e))
         this.totalDiv = document.getElementById("total_div") as HTMLDivElement;
         this.membersContainer = document.getElementById("member_container") as HTMLUListElement;
-        this.allPledgersDiv = document.getElementById("mr_wrappy") as HTMLDivElement;
+        // this.allPledgersDiv = document.getElementById("mr_wrappy") as HTMLDivElement;
         this.editMemberDiv = document.getElementById("edit_user") as HTMLDivElement;
         let backToAllElement = document.getElementById("back_to_all_button") as HTMLButtonElement;
         backToAllElement.addEventListener("click", (event) => {
@@ -23,7 +23,7 @@ class GroupPledger {
     }
 
     public callPopulateMembers() {
-        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_members_service`
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_members`
         axios.get(callString)
             .then(response => this.populateMembers(response))
             .catch(error => this.error(error))
@@ -137,7 +137,8 @@ class GroupPledger {
     }
 
     private makePledge(memberName: string, pledge: number, pledgeTime: string) {
-        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/pledge?pledge=${pledge}&name=${memberName}&remoteTime=${pledgeTime}`
+        let projectId = 7624
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/pledge?pledge=${pledge}&projectId=${projectId}&name=${memberName}&remoteTime=${pledgeTime}`
         axios.get(callString)
             .then(response => this.dealWithPledge(response))
             .catch(error => this.error(error))
