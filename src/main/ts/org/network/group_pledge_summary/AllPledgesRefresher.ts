@@ -134,6 +134,7 @@ export class AllPledgesRefresher {
         this.projectDetailsDiv.innerText = `${project.projectId} - ${project.projectOrganisation}`
         this.projectSponsorDiv.innerText = project.projectSponsor
         this.projectStatusDiv.innerText = project.projectStatus
+        this.pledgeFetchType = "refreshAll"
         this.clearPledges()
     }
 
@@ -158,7 +159,7 @@ export class AllPledgesRefresher {
 
         let projectId = this.selectedProject.projectId
 
-        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_pledges?projectId=${projectId}&sinceTime=${sinceTime}`
+        let callString = `http://${Constants.SERVER_IP}:${Constants.SERVER_PORT}/all_pledges?projectId=${projectId}&requestType=${this.pledgeFetchType}&sinceTime=${sinceTime}`
         // let callString = "http://localhost:8080/all_pledges_service"
         console.log("getting pledges")
         axios.get(callString)
@@ -170,7 +171,8 @@ export class AllPledgesRefresher {
     public updatePledges(response: AxiosResponse) {
 
         // let allPLedgesList: string[] = [];
-        let pledges = response.data;
+        let pledges = response.data.pledges;
+        let callType: string = response.data.pledgesCallType
 
         let newPledges: PledgeTS[] = []
 
@@ -201,15 +203,20 @@ export class AllPledgesRefresher {
             let i = 0;
         }
 
-        this.recentPledgesQueue = newPledges
-
         let recentPledgesString = ""
-        for (let pledge of this.recentPledgesQueue.reverse()) {
-            if (pledge.newPledge) {
-                recentPledgesString += `<span style="color: crimson;font-weight: bold">${pledge.name}:${pledge.pledge}</span> `;
-            } else {
-                recentPledgesString += `<span style="color: black">${pledge.name}:${pledge.pledge}</span> `;
+
+        if (callType === "getLatest") {
+            this.recentPledgesQueue = newPledges
+            for (let pledge of this.recentPledgesQueue.reverse()) {
+                if (pledge.newPledge) {
+                    recentPledgesString += `<span style="color: crimson;font-weight: bold">${pledge.name}:${pledge.pledge}</span> `;
+                } else {
+                    recentPledgesString += `<span style="color: black">${pledge.name}:${pledge.pledge}</span> `;
+                }
             }
+        } else if (callType === "refreshAll") {
+            console.log("refresh called - setting to get latest pledges")
+            this.pledgeFetchType = "getLatest"
         }
 
         this.recentPledgesDiv.innerHTML = recentPledgesString
@@ -284,6 +291,7 @@ export class AllPledgesRefresher {
     private allPledgesDict: {[key: string]: number} = {};
     private passedThreshold: boolean = false;
     private latestPledgeTime: string = null;
+    private pledgeFetchType: string = "refreshAll";
     private allProjects: ProjectTS[]
     private selectedProject: ProjectTS
     private selectedProjectIndex: number = 0;

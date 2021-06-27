@@ -8,24 +8,27 @@
 <body>
 <script type="text/javascript" th:src="@{/phone_client.js}"></script>
 <input id="hidden_name_field" type="hidden" th:value="${name}">
-<p style="font-size: 40pt" th:text="'Hellooo, ' +  ${name} + '!'"></p>
-<div id="pledgeDiv" style="border-width: 1px;border-color: black;min-width: 100%;
-    width: 100%;height: 70px;font-weight: bold;font-size: 60pt;text-align: center;display: flex;
+<span style="font-size: 15pt" th:text="'pledging as ' + ${name}"></span><br>
+<span style="font-size: 20pt" th:text="'Aid for refugees on Leros'"></span><br>
+<span style="font-size: 20pt" th:text="'7624 - Aegean Solidarity'"></span><br>
+<span style="font-size: 20pt" th:text="'Graham'"></span><br>
+<div id="pledgeDiv" style="border-width: 1px;border-color: black;
+    width: 100%;max-width: 1000px;height: 70px;font-weight: bold;font-size: 60pt;text-align: center;display: flex;
     justify-content: center;align-items: center">
     0
 </div>
-<div id="runDiv" class="float-container" style="width: 100%;padding-bottom: 50px">
-    <button id="takeButton" class="float-child disable-dbl-tap-zoom"
-            style="width: 50%;height: 150px;border-style: solid;font-weight: bold;font-size: 24pt">
-        -
-    </button>
+<div id="runDiv" class="float-container" style="width: 100%;max-width: 1000px;padding-bottom: 50px">
+<!--    <button id="takeButton" class="float-child disable-dbl-tap-zoom"-->
+<!--            style="width: 20%;height: 150px;border-style: solid;font-weight: bold;font-size: 24pt">-->
+<!--        - -->
+<!--    </button>-->
     <button id="giveButton" class="float-child disable-dbl-tap-zoom"
-            style="width: 50%;height: 150px;border-style: solid;background-color: tomato;
-            border-color: tomato;font-weight: bold;font-size: 24pt">
-        +
+            style="width: 100%;height: 150px;border-style: solid;background-color: tomato;
+            border-color: tomato;font-weight: bold;font-size: 40pt">
+        Pledge
     </button>
 </div>
-
-<div id="messageDiv" style="text-align: center;font-size: 24pt">I am the message</div>
+<br>
+<div id="messageDiv" style="text-align: center;font-size: 24pt;width: 100%;max-width: 1000px;">nothing here</div>
 </body>
 </html>

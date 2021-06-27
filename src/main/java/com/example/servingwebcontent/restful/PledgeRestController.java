@@ -36,9 +36,10 @@ public class PledgeRestController {
     }
 
     @GetMapping("/all_pledges")
-    public List<Pledge> allPledges(@RequestParam(value = "projectId", defaultValue = "-1") int projectId,
-                                   @RequestParam(value = "sinceTime", defaultValue = "all") String timeString) {
-        List<Pledge> allPledges = counter.getAllPledges(projectId, timeString);
+    public PledgesCollection allPledges(@RequestParam(value = "projectId", defaultValue = "-1") int projectId,
+                                        @RequestParam(value = "requestType", defaultValue = "refreshAll") String requestType,
+                                        @RequestParam(value = "sinceTime", defaultValue = "all") String timeString) {
+        PledgesCollection allPledges = counter.getAllPledges(projectId, timeString, requestType);
 
         return allPledges;
     }

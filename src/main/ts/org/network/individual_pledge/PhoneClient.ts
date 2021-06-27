@@ -41,7 +41,7 @@ class Caller {
         this.newPledge += pledge;
         console.log(this.newPledge)
         this.tempTotalPledge = this.totalPledge + this.newPledge;
-        this.pledgeDiv.innerText = String(this.tempTotalPledge);
+        this.pledgeDiv.innerHTML = `£${String(this.totalPledge)} + £${this.newPledge}`;
         let dateTime = new Date()
         let dateString = moment(dateTime).format('yy:MM:DD:HH:mm:ss:SS');
 
@@ -69,7 +69,7 @@ class Caller {
         this.newPledge = 0;
 
         this.messageDiv.innerText = `Pledge saved (${getPrettyDateString()})`
-        this.pledgeDiv.innerText = String(this.totalPledge);
+        this.pledgeDiv.innerText = `£${String(this.totalPledge)}`;
     }
 
     public error(error) {

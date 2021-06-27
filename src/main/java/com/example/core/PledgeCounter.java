@@ -1,11 +1,9 @@
 package com.example.core;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.context.annotation.Bean;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,15 +46,19 @@ public class PledgeCounter {
         return this.totalPledges.get(projectId);
     }
 
-    public List<Pledge> getAllPledges(int desiredProjectId, String sinceTimeString) {
+    public PledgesCollection getAllPledges(int desiredProjectId,
+                                           String sinceTimeString,
+                                           String requestType) {
 
-        System.out.printf("Getting pledges for project %s since %s%n", desiredProjectId, sinceTimeString);
+        System.out.printf("Getting pledges for project %s since %s (%s)\n", desiredProjectId, sinceTimeString, requestType);
 
-        List<Pledge> results = new ArrayList<>();
+        List<Pledge> pledges = new ArrayList<>();
+        PledgesCollection results = null;
 
-        if (sinceTimeString.equals("all")) {
-            results = this.allPledges.stream()
+        if (requestType.equals("refreshAll") || sinceTimeString.equals("all")) {
+            pledges = this.allPledges.stream()
                     .filter(pledge -> desiredProjectId == (pledge.getProjectId())).collect(Collectors.toList());
+            results = new PledgesCollection(pledges, requestType);
         } else {
             Date sinceDate = this.parseDate(sinceTimeString);
             Date sinceDateTrimmed = DateUtils.truncate(sinceDate, Calendar.MILLISECOND);
@@ -65,12 +67,13 @@ public class PledgeCounter {
                 Date serverPledgeTime = pledge.getServerPledgeTime();
                 Date serverPledgeTimeTrimmed = DateUtils.truncate(serverPledgeTime, Calendar.MILLISECOND);
                 if(pledge.getProjectId() == desiredProjectId && serverPledgeTimeTrimmed.compareTo(sinceDateTrimmed) > 0) {
-                    results.add(pledge);
+                    pledges.add(pledge);
                 }
             }
+            results = new PledgesCollection(pledges, requestType);
         }
 
-        System.out.printf("returning - %s\n", results);
+        System.out.printf("returning - %s\n", results.pledges);
 
         return results;
     }
